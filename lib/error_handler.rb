@@ -56,7 +56,7 @@ module ErrorHandler
     begin
       yield
     rescue => exception 
-      self.class.exception_handling_rules.each do |rule|
+      (self.class.exception_handling_rules - [except]).each do |rule|
         return if self.class.handle_exception?(exception, rule)
       end
 
