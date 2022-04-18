@@ -19,14 +19,13 @@ module ErrorHandler
   end
 
   module ClassMethods
-    @@exception_handling_rules = Array.new
-    
     def handle_exception(klass = nil, message = nil, **attributes)
-      @@exception_handling_rules << { klass: klass, message: message, attributes: attributes }
+      @exception_handling_rules ||= []
+      @exception_handling_rules << { klass: klass, message: message, attributes: attributes }
     end
 
     def exception_handling_rules
-      @@exception_handling_rules
+      @exception_handling_rules
     end
   end
 
@@ -44,12 +43,12 @@ module ErrorHandler
 
   def handle_exception?(exception, rule)
     klass_match = rule[:klass].nil? || rule[:klass] == exception.class
-    message_match = rule[:message].nil? || exception_message_matches_rule?(exception, rule)
-    attribute_match = rule[:attributes].nil? || exception_matches_attribute_rules?(exception, rule)
+    message_match = rule[:message].nil? || exception_matches_message_rule?(exception, rule)
+    attribute_match = rule[:attributes].empty? || exception_matches_attribute_rules?(exception, rule)
     klass_match && message_match && attribute_match
   end
 
-  def exception_matches_message_rules?(exception, rule)
+  def exception_matches_message_rule?(exception, rule)
     if rule[:message].is_a?(String)
       exception.message.include?(rule[:message])
     elsif rule[:message].is_a?(Regexp)
