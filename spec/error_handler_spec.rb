@@ -11,7 +11,7 @@ describe ErrorHandler do
     expect(SampleClass).to be_a(Object)
     expect(SampleErrorMessageClass).to be_a(Object)
   end
-  
+
   it 'should not raise an error' do
     sample = SampleClass.new
     expect { sample.standard_error_method }.not_to raise_error
@@ -21,6 +21,11 @@ describe ErrorHandler do
   it 'should raise an error when explicitly excluding the rule with handle_errors' do
     sample = SampleClass.new
     expect { sample.override_error_handling_rule }.to raise_error(StandardError)
+  end
+
+  it 'should raise an error when overriding with multiple rules via array' do
+    sample = SampleClass.new
+    expect { sample.override_multiple_rules }.to raise_error(CustomError)
   end
 
   it 'should not raise an error when the message rule and class matches' do
@@ -42,25 +47,16 @@ describe ErrorHandler do
     sample = SampleAttributeErrorClass.new
     expect { sample.should_not_be_ignored }.to raise_error(CustomError)
   end
-end
 
-class SampleClass
-  include ErrorHandler
-
-  handle_exception StandardError
-
-  def standard_error_method
-    handle_errors do
-      raise StandardError
-      puts 'This will NOT be executed'
-    end
-    puts 'This will be executed'
+  it 'should not raise an error when only a message is provided to the rule that matches' do
+    sample = SampleMessageOnlyErrorClass.new
+    expect { sample.should_be_ignored }.not_to raise_error
   end
 
-  def override_error_handling_rule
-    rule = self.class.exception_handling_rules[0]
-    handle_errors(except: rule) do
-      raise StandardError
-    end
+  it 'should not raise an error for an error rule using only attributes' do
+    sample = SampleAttributeOnlyErrorClass.new
+    expect { sample.should_be_ignored }.not_to raise_error
   end
 end
+
+
