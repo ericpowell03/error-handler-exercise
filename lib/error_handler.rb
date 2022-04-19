@@ -37,8 +37,9 @@ module ErrorHandler
   #     puts 'This will execute.'
   #   end
 
-  #   # You may override any number of rules by passing an a rule (or array of rules)
-  #   # as except: when calling handle_errors
+  #   # You may override any number of rules by passing a rule (or an array of rules)
+  #   # via the 'except' arg when calling handle_errors.
+  #   # Example:
   #   def exclude_a_rule
   #     do_not_handle = {klass: StandardError, message: nil, attributes: {}}
   #     handle_errors(except: do_not_handle) do
