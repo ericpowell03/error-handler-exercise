@@ -88,4 +88,9 @@ describe ErrorHandler do
       expect { sample.should_not_be_ignored }.to raise_error(CustomError)
     end
   end
+
+  it 'should allow the module to be added to the parent class and invoked on the child' do
+    expect(ParentClass.exception_handling_rules).to be_nil
+    expect(ChildClass.exception_handling_rules.length).to eq(1)
+  end
 end

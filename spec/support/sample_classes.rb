@@ -124,5 +124,12 @@ class SampleAttributeOnlyErrorClass
       raise CustomError.new('Custom error message to handle', status_code: 404)
     end
   end
+end
 
+class ParentClass
+  include ErrorHandler
+end
+
+class ChildClass < ParentClass
+  handle_exception StandardError
 end
