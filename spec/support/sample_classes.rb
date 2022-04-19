@@ -53,7 +53,6 @@ class SampleErrorMessageClass
   end
 end
 
-
 class SampleAttributeErrorClass
   include ErrorHandler
 

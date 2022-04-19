@@ -58,5 +58,3 @@ describe ErrorHandler do
     expect { sample.should_be_ignored }.not_to raise_error
   end
 end
-
-
