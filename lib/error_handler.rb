@@ -1,18 +1,55 @@
-module ErrorHandler
-  # #handle_errors should accept a block as an argument that will execute
-  # code in the block and conditionally swallow errors given the defined rules
+  # ErrorHandler can be included in classes to define rules to conditionally
+  # swallow errors that occur in a givne block of code.
+
+  # First, define rules using handle_exception.
+  # Then, handle errors by wrapping code in a block passed to handle_errors.
   #
   # Example:
   #
   # class MyClass
   #   include ErrorHandler
-  #
+    
+  #   # Rule Examples:
+  #   handle_exception StandardError
+
+  #   # Must match the error class && message to be handled
+  #   # handle_exception CustomError, 'Custom error message'
+  #   # Must match the error class, message, && attributes to be handled
+  #   # handle_exception CustomError, 'Custom error message', status_code: 404, status: :not_found
+  #   # Attributes (if they exist), must all match on any error class
+  #   # handle_exception nil, nil, status_code: 404, status: :not_found
+  #   # The message must match, but on any class
+  #   # handle_exception nil, 'Custom error message'
+    
+  
+  #   # Any code within the block that matches the rule will be rescued
   #   def perform
   #     handle_errors do
   #       puts "Do work..."
+  #       # This error will be rescued
+  #       raise StandardError
+  #       # This code will NOT execute, because the block is returned
+  #       # once the handled error is raised
+  #       puts 'This will not execute.'
+  #     end
+  #     # This code will execute if a handled error is raised within
+  #     # the handle_errors block because the block returns after a handled error.
+  #     puts 'This will execute.'
+  #   end
+
+  #   # You may override any number of rules by passing an a rule (or array of rules)
+  #   # as except: when calling handle_errors
+  #   def exclude_a_rule
+  #     do_not_handle = {klass: StandardError, message: nil, attributes: {}}
+  #     handle_errors(except: do_not_handle) do
+  #       puts 'The error rule do_not_handle will NOT be ignored if raised'  
+  #       # This error will be raised and will halt execution.
+  #       raise StandardError
   #     end
   #   end
   # end
+
+module ErrorHandler
 
   def self.included(klass)
     klass.extend(ClassMethods)
