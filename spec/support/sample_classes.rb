@@ -138,4 +138,10 @@ end
 
 class ChildClass < ParentClass
   handle_exception CustomError
+
+  def should_not_raise_error
+    handle_errors do
+      raise CustomError
+    end
+  end
 end

@@ -92,6 +92,7 @@ describe ErrorHandler do
   it 'should allow the module to be added to the parent class and invoked on the child' do
     expect(ParentClass.exception_handling_rules).to be_nil
     expect(ChildClass.exception_handling_rules.length).to eq(1)
+    expect { ChildClass.new.should_not_raise_error }.not_to raise_error
   end
 
   it 'should allow a class to call handle_errors without any rules set' do
