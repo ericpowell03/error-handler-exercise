@@ -1,14 +1,15 @@
-  # ErrorHandler can be included in classes to define rules to conditionally
-  # swallow errors that occur in a givne block of code.
-
-  # First, define rules using handle_exception.
-  # Then, handle errors by wrapping code in a block passed to handle_errors.
+# Define rules to conditionally swallow exceptions that occur within a given block of code
+module ErrorHandler
+  # How To:
+  # 1: Include the ErrorHandler module in your class
+  # 2. Define rules using handle_exception
+  # 3. Handle errors by wrapping code in a block passed to handle_errors
   #
   # Example:
   #
   # class MyClass
   #   include ErrorHandler
-    
+
   #   # Rule Examples:
   #   handle_exception StandardError
 
@@ -20,8 +21,7 @@
   #   # handle_exception nil, nil, status_code: 404, status: :not_found
   #   # The message must match, but on any class
   #   # handle_exception nil, 'Custom error message'
-    
-  
+
   #   # Any code within the block that matches the rule will be rescued
   #   def perform
   #     handle_errors do
@@ -42,14 +42,12 @@
   #   def exclude_a_rule
   #     do_not_handle = {klass: StandardError, message: nil, attributes: {}}
   #     handle_errors(except: do_not_handle) do
-  #       puts 'The error rule do_not_handle will NOT be ignored if raised'  
+  #       puts 'The error rule do_not_handle will NOT be ignored if raised'
   #       # This error will be raised and will halt execution.
   #       raise StandardError
   #     end
   #   end
   # end
-
-module ErrorHandler
 
   def self.included(klass)
     klass.extend(ClassMethods)
@@ -90,15 +88,12 @@ module ErrorHandler
   end
 
   def handle_errors(except: nil)
-    begin
-      yield
-    rescue => exception 
-      (self.class.exception_handling_rules - [except]).each do |rule|
-        return if self.class.handle_exception?(exception, rule)
-      end
-
-      raise exception
+    yield
+  rescue => e
+    (self.class.exception_handling_rules - [except]).each do |rule|
+      return if self.class.handle_exception?(e, rule)
     end
-  end
 
+    raise e
+  end
 end

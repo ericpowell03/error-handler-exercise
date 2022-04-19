@@ -1,4 +1,4 @@
-require "error_handler"
+require 'error_handler'
 require 'byebug'
 
 describe ErrorHandler do
@@ -26,7 +26,7 @@ describe ErrorHandler do
     sample = SampleErrorMessageClass.new
     expect { sample.should_be_ignored }.not_to raise_error
   end
-  
+
   it 'should raise an error when the class matches but message does not' do
     sample = SampleErrorMessageClass.new
     expect { sample.should_not_be_ignored }.to raise_error(StandardError)
@@ -42,7 +42,6 @@ describe ErrorHandler do
     expect { sample.should_not_be_ignored }.to raise_error(CustomError)
   end
 end
-
 
 class SampleClass 
   include ErrorHandler
@@ -108,4 +107,3 @@ class SampleAttributeErrorClass
     end
   end
 end
-
