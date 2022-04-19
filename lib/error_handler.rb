@@ -55,6 +55,10 @@ module ErrorHandler
   end
 
   module ClassMethods
+    # The handle_exceptions method adds an exception handling rule to a class variable
+    # These are stored as an array of hashes. Each hash in the array is a unique rule.
+    # Structuring this way allows the end-user to define multiple rules in a clear way,
+    # with the required amount of flexibility.
     def handle_exception(klass = nil, message = nil, **attributes)
       @exception_handling_rules ||= []
       @exception_handling_rules << { klass: klass, message: message, attributes: attributes }
