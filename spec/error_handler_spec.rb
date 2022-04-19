@@ -93,4 +93,9 @@ describe ErrorHandler do
     expect(ParentClass.exception_handling_rules).to be_nil
     expect(ChildClass.exception_handling_rules.length).to eq(1)
   end
+
+  it 'should allow a class to call handle_errors without any rules set' do
+    parent = ParentClass.new
+    expect { parent.should_raise_custom_error }.to raise_error(CustomError)
+  end
 end

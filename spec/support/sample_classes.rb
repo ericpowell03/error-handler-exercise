@@ -128,8 +128,14 @@ end
 
 class ParentClass
   include ErrorHandler
+
+  def should_raise_custom_error
+    handle_errors do
+      raise CustomError
+    end
+  end
 end
 
 class ChildClass < ParentClass
-  handle_exception StandardError
+  handle_exception CustomError
 end

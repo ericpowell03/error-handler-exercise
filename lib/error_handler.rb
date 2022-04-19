@@ -92,7 +92,7 @@ module ErrorHandler
   def handle_errors(except: nil)
     yield
   rescue => e
-    (self.class.exception_handling_rules - [except]&.flatten).each do |rule|
+    ([self.class.exception_handling_rules].flatten - [except].flatten).each do |rule|
       return if self.class.handle_exception?(e, rule)
     end
 
