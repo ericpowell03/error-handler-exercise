@@ -51,6 +51,12 @@ class SampleErrorMessageClass
       raise StandardError
     end
   end
+
+  def should_be_ignored_for_message_mismatch
+    handle_errors do
+      raise CustomError, 'Ignore specific message for Standard Error'
+    end
+  end
 end
 
 class SampleAttributeErrorClass
@@ -81,16 +87,29 @@ class SampleMessageOnlyErrorClass
       raise CustomError, 'Custom error message to handle'
     end
   end
+
+  def should_not_be_ignored
+    handle_errors do
+      raise CustomError
+    end
+  end
 end
 
 class SampleAttributeOnlyErrorClass
   include ErrorHandler
 
-  handle_exception nil, nil, status_code: 404
+  handle_exception nil, nil, status_code: 404, status: :not_found
 
   def should_be_ignored
+    handle_errors do
+      raise CustomError.new('Custom error message to handle', status_code: 404, status: :not_found)
+    end
+  end
+
+  def should_not_be_ignored
     handle_errors do
       raise CustomError.new('Custom error message to handle', status_code: 404)
     end
   end
+
 end
