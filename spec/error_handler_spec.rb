@@ -58,14 +58,22 @@ describe ErrorHandler do
   end
 
   describe 'With a rule that only includes a message' do
+    let(:sample) { SampleMessageOnlyErrorClass.new }
+
     it 'should not raise an error when the message matches' do
-      sample = SampleMessageOnlyErrorClass.new
       expect { sample.should_be_ignored }.not_to raise_error
     end
 
     it 'should raise an error when the message does not match' do
-      sample = SampleMessageOnlyErrorClass.new
       expect { sample.should_not_be_ignored }.to raise_error(CustomError)
+    end
+
+    it 'should ignore the error if the regex matches the message' do
+      expect { sample.regex_message_should_be_ignored }.not_to raise_error
+    end
+
+    it 'should raise the error if the regex does not match' do
+      expect { sample.regex_message_should_not_be_ignored }.to raise_error(CustomError)
     end
   end
 

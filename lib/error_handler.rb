@@ -74,9 +74,10 @@ module ErrorHandler
     private
 
     def exception_matches_message_rule?(exception, rule)
-      if rule[:message].is_a?(String)
+      case rule[:message]
+      when String
         exception.message.include?(rule[:message])
-      elsif rule[:message].is_a?(Regexp)
+      when Regexp
         exception.message.match(rule[:message])
       end
     end

@@ -81,10 +81,23 @@ class SampleMessageOnlyErrorClass
   include ErrorHandler
 
   handle_exception nil, 'Custom error message to handle'
+  handle_exception nil, /a regex error message/
 
   def should_be_ignored
     handle_errors do
       raise CustomError, 'Custom error message to handle'
+    end
+  end
+
+  def regex_message_should_be_ignored
+    handle_errors do
+      raise CustomError, 'a regex error message to be ignored'
+    end
+  end
+
+  def regex_message_should_not_be_ignored
+    handle_errors do
+      raise CustomError, 'a regex error'
     end
   end
 
