@@ -44,7 +44,7 @@ describe ErrorHandler do
   end
 end
 
-class SampleClass 
+class SampleClass
   include ErrorHandler
 
   handle_exception StandardError

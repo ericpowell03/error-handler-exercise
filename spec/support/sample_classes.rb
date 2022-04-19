@@ -17,7 +17,7 @@ end
 class CustomError < StandardError
   attr_reader :status_code, :status
 
-  def initialize(msg='CustomError', status_code: nil, status: nil)
+  def initialize(msg = nil, status_code: nil, status: nil)
     @status_code = status_code
     @status = status
     super(msg)
